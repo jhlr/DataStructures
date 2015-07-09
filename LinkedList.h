@@ -34,25 +34,32 @@ int LinkedList_size(LinkedList* self) {
 	return i;
 }
 
-void LinkedList_rotate(LinkedList* self, int index) {
-	const int size = LinkedList_size(self);
-	if(size == 0 || index == 0){
+void LinkedList_rotate(LinkedList* self, int index){
+	if(self == NULL || index == 0){
 		return;
 	}
-	NodeN* node = self->head;
-	index %= size;
-	int i;
-	if(index < 0){
-		index = size + index;
-	}
-	for(i=0; i<index; i++){
-		node = node->next;
+	NodeN* temp = self->head;
+	NodeN* node = temp;
+	if(index > 0){
+		for(i=0; i<index; i++){
+			node = node->next;
+		}
+	} else {
+		int count = 0;
+		do{
+			if(count <= index){
+				node = node->next;
+			} else {
+				--count;
+			}
+			temp = temp->next;
+		}while(temp != self->head);
 	}
 	self->head = node;
 }
 
 void LinkedList_add(LinkedList* self, int index, void* value) {
-	if (LinkedList_isEmpty(self)) {
+	if (LinkedList_isEmpty(self)){
 		self->head = NodeN_new(value, NULL);
 		self->head->next = self->head;
 		return;
